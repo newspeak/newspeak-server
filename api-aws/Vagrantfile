@@ -1,0 +1,26 @@
+Vagrant.configure("2") do |config|
+
+  if ENV['AWS_ACCOUNT'] != 'aws-api' then
+    puts "use with aws api account only!"
+    puts ". ~/.ec2/api.sh"
+    exit
+  end
+ 
+  config.vm.box = "dummy"
+
+  config.ssh.private_key_path = "~/.ssh/aws_key"
+  config.ssh.username = "ubuntu"
+
+  config.vm.provider :aws do |aws|
+    aws.access_key_id = ENV['AWS_ACCESS_KEY']
+    aws.secret_access_key = ENV['AWS_SECRET_KEY']
+    aws.keypair_name = "aws_key"
+    aws.ssh_private_key_path = "~/.ssh/aws_key"
+
+    aws.ami = "ami-3d160149"
+    aws.instance_type = "t1.micro"
+    aws.ssh_username = "ubuntu"
+    aws.region = "eu-west-1"
+    aws.security_groups = "22+80"
+  end
+end

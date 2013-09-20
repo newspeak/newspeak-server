@@ -1,0 +1,53 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          newspeak
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: newspeak - api server
+# Description:       this file needs a rewrite and has to be ported to use upstart!
+### END INIT INFO
+
+# import logging functions like log_success_msg, log_failure_msg and log_warning_msg:
+. /lib/lsb/init-functions
+
+[ -f /etc/default/rcS ] && . /etc/default/rcS
+PATH=/bin:/usr/bin:/sbin:/usr/sbin
+BIN=/usr/local/bin/newspeak
+LOG=/var/log/newspeak/newspeak.log
+PUSHLOG=/var/log/newspeak/uniqush.log
+STATSLOG=/var/log/newspeak/statsdaemon.log
+
+case "$1" in
+  start)                
+    log_begin_msg "Starting newspeak api server..."
+    sudo service tomcat7 start
+#    (/usr/local/bin/statsdaemon > $STATSLOG 2>&1) &
+    (/usr/local/bin/uniqush-push > $PUSHLOG 2>&1) &
+    sleep 1
+    ($BIN > $LOG 2>&1) &
+    log_end_msg 0
+    ;;  
+  stop)
+    log_begin_msg "Stopping newspeak api server..."
+    (killall --quiet newspeak) &
+    (sudo service tomcat7 stop) &
+    (killall --quiet statsdaemon) &
+    (killall -9 --quiet uniqush-push) &
+    sleep 1
+    log_end_msg 0
+    ;;  
+  restart|force-reload)
+    $0 stop
+    $0 start
+    ;;  
+  status)       
+    ;;
+  *)
+    log_failure_msg "Usage: $PROGRAM {start|stop|restart|force-reload|status}"
+    exit 1
+esac
+
+exit 0
