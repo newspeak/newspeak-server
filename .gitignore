@@ -1,3 +1,23 @@
+# temp files
+api-aws/newspeak
+
+# binaries
+shared/newspeak/out
+shared/newspeak/pkg
+
+# keys and certificates
+*.pem
+*.p12
+
+# vm config files
+.vagrant
+
+# cached files
+cache
+
+# go dependencies
+shared/newspeak/src/github.com
+
 # Xcode
 .DS_Store
 build/
