@@ -41,7 +41,7 @@ vagrant ssh -c "sudo apt-get -y --purge autoremove"
 # update guest additions
 vagrant vbguest
 
-# do clean reboot and check if guest additions version on startup
+# do clean reboot. you have to manually check if guest addition versions match on startup
 vagrant halt
 vagrant up --no-provision
 
