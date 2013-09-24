@@ -188,8 +188,8 @@ sudo cp /vagrant/api/cassandra.yaml /etc/cassandra/cassandra.yaml
 sudo rm -rf /var/lib/cassandra/data
 
 # reduce memory usage of cassandra and tomcat for aws by overwriting memory default value
-# sudo cp $FILES/live/cassandra-env.sh /etc/cassandra/
-# sudo cp $FILES/live/tomcat7.default /etc/default/
+# sudo cp $FILES/api/cassandra-env.sh /etc/cassandra/
+# sudo cp $FILES/api/tomcat7.default /etc/default/
 
 
 echo ===== uniqush =====
@@ -234,7 +234,7 @@ echo ===== go api server =====
 sudo apt-get install -y memcached
 
 # initscript
-sudo cp $FILES/live/newspeak.initscript /etc/init.d/newspeak
+sudo cp $FILES/api/newspeak.initscript /etc/init.d/newspeak
 sudo chmod 755 /etc/init.d/newspeak
 cd /etc/init.d
 sudo update-rc.d newspeak defaults
@@ -260,7 +260,7 @@ sudo cp bin/newspeak /usr/local/bin
 
 # set apns certificates
 sudo mkdir -p /etc/newspeak/apns-certs
-sudo cp -r $FILES/live/apns-certs-production/* /etc/newspeak/apns-certs
+sudo cp -r $FILES/api/apns-certs-production/* /etc/newspeak/apns-certs
 
 # bitly statsdaemon
 cd
