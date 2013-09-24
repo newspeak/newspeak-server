@@ -4,6 +4,7 @@ api-aws/newspeak
 # binaries
 shared/newspeak/out
 shared/newspeak/pkg
+shared/newspeak/bin
 
 # keys and certificates
 *.pem
