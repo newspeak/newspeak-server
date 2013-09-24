@@ -134,6 +134,9 @@ newspeak
 EOF
 
 # generate key
+# open question: is at this stage of the boot process alread enough entropy available from the linux kernel to generate a good key?
+# see: "Mining Your Ps and Qs: Detection of Widespread Weak Keys in Network Devices",
+# https://factorable.net/weakkeys12.extended.pdf
 sudo mkdir -p /etc/tinc/newspeak
 cd /etc/tinc/newspeak
 sudo openssl genrsa -out rsa_key.priv 8192
