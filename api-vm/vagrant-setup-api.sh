@@ -50,9 +50,6 @@ vagrant up --no-provision
 ../shared/scripts/vagrant/scp.sh -r ../cache/maven/* default:/home/vagrant/.m2
 vagrant ssh -c "sudo mv /home/vagrant/deb/*.deb /var/cache/apt/archives; rm -rf /home/vagrant/deb"
 
-# update virtualbox guest additions
-../shared/scripts/vagrant/setup-basebox.sh
-
 # start api server installation
 vagrant ssh -c "/vagrant/api/api-install.sh"
 
