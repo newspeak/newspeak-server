@@ -212,7 +212,7 @@ sudo apt-get install -y redis-server mercurial
 cd
 git clone https://github.com/uniqush/uniqush-push.git
 cd uniqush-push
-#git reset --hard 1.4.3
+git reset --hard 1.5.0
 export GOPATH=$(pwd)
 go get code.google.com/p/goconf/conf # requires mercurial
 go get github.com/nu7hatch/gouuid
