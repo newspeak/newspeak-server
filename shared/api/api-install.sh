@@ -273,6 +273,8 @@ sudo cp bin/statsdaemon /usr/local/bin
 
 echo ===== usergrid setup =====
 
+sudo /etc/init.d/tinc start
+sudo /etc/init.d/tomcat7 start
 sudo /etc/init.d/cassandra start
 
 # setup db
