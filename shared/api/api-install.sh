@@ -181,7 +181,8 @@ sudo apt-get install -y cassandra
 # stop until setup is complete to free up memory
 sudo /etc/init.d/cassandra stop
 
-# rename and configure cluster
+# update cluster config
+sudo cp /vagrant/api/cassandra.yaml /etc/cassandra/cassandra.yaml
 
 sudo rm -rf /var/lib/cassandra/data
 
