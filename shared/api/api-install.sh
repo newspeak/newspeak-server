@@ -118,7 +118,7 @@ sudo bash -c "cat >> /etc/network/interfaces" <<EOF
 auto vpn
 iface vpn inet static
         address 192.168.11.1
-#        use address 192.168.11.1 on node1
+#        use address 192.168.11.1 on node1 (running cassandra)
 #        use address 192.168.12.1 on node2
         netmask 255.255.0.0
         tinc-net newspeak
