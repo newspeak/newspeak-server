@@ -46,6 +46,7 @@ vagrant halt
 vagrant up --no-provision
 
 # copy over cached files to speed up compilation
+vagrant ssh -c "mkdir -p /home/vagrant/deb /home/vagrant/.m2"
 ../shared/scripts/vagrant/scp.sh -r ../cache/deb/*.deb default:/home/vagrant
 ../shared/scripts/vagrant/scp.sh -r ../cache/maven/* default:/home/vagrant/.m2
 vagrant ssh -c "sudo mv /home/vagrant/deb/*.deb /var/cache/apt/archives; rm -rf /home/vagrant/deb"
