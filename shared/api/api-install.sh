@@ -98,8 +98,15 @@ mvn clean install -DskipTests=true -Dusergrid-custom-spring-properties=classpath
 # /config/src/main/resources/usergrid-custom.properties
 # /rest/src/main/resources/usergrid-custom.properties
 
-cd ..
+# install usergrid in tomcat
+sudo aptitude install -y tomcat7
+sudo rm -rf /var/lib/tomcat7/webapps/ROOT
+sudo cp $HOME/usergrid-stack/rest/target/ROOT.war /var/lib/tomcat7/webapps
 
+# stop until setup is complete to free up memory
+sudo /etc/init.d/tomcat7 stop
+
+cd ..
 
 echo ===== vpn =====
 # tinc vpn
@@ -169,25 +176,16 @@ wget -O - http://debian.datastax.com/debian/repo_key | sudo apt-key add -
 sudo apt-get update
 sudo apt-get install -y cassandra
 
-# stop until setup is complete to free up memory on aws
-#sudo /etc/init.d/cassandra stop
+# stop until setup is complete to free up memory
+sudo /etc/init.d/cassandra stop
 
-# install usergrid in tomcat
-sudo aptitude install -y tomcat7
-sudo rm -rf /var/lib/tomcat7/webapps/ROOT
-sudo cp $HOME/usergrid-stack/rest/target/ROOT.war /var/lib/tomcat7/webapps
+# rename and configure cluster
 
-# rename and configure cluster, apply changes
-sudo cp $FILES/live/cassandra.yaml /etc/cassandra/
-rm -rf /var/lib/cassandra/data
+sudo rm -rf /var/lib/cassandra/data
 
 # reduce memory usage of cassandra and tomcat for aws by overwriting memory default value
 # sudo cp $FILES/live/cassandra-env.sh /etc/cassandra/
 # sudo cp $FILES/live/tomcat7.default /etc/default/
-
-# stop until setup is complete to free up memory
-sudo /etc/init.d/cassandra stop
-sudo /etc/init.d/tomcat7 stop
 
 
 echo ===== uniqush =====
