@@ -138,7 +138,6 @@ sudo mkdir -p /etc/tinc/newspeak
 cd /etc/tinc/newspeak
 sudo openssl genrsa -out rsa_key.priv 8192
 sudo openssl rsa -in rsa_key.priv -pubout > rsa_key.pub
-#sudo tincd -K 8192 -n newspeak
 
 sudo bash -c "cat > /etc/tinc/newspeak/tinc.conf" <<EOF
 Device=/dev/net/tun
