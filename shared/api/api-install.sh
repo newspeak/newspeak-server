@@ -281,9 +281,11 @@ sudo /etc/init.d/cassandra start
 sudo apt-get install curl -y
 curl --user superuser:superuser http://localhost:8080/system/database/setup
 
-# simple test
+# simple test - should not return any errors
 curl localhost:8080/status
 curl localhost:8080/test/hello
+echo checking if cassandra is available from usergrid:
+curl -s localhost:8080/status | grep cassandraAvailable
 
 # create organization
 curl -X POST  \
