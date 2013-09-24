@@ -194,8 +194,9 @@ sudo rm -rf /var/lib/cassandra/data
 
 echo ===== uniqush =====
 
-# go
-wget https://go.googlecode.com/files/go1.1.1.linux-amd64.tar.gz
+# install a recent version of go
+cd
+wget https://go.googlecode.com/files/go1.1.2.linux-amd64.tar.gz
 tar xf go*.linux-amd64.tar.gz
 rm go*linux-amd64.tar.gz
 sudo mv go /usr/local
