@@ -203,8 +203,11 @@ sudo mv go /usr/local
 sudo ln -s /usr/local/go/bin/go /usr/local/bin
 sudo ln -s /usr/local/go/bin/gofmt /usr/local/bin
 sudo ln -s /usr/local/go/bin/godoc /usr/local/bin
+
+# alternatively, install the version provided by the package manager 
 #sudo DEBIAN_FRONTEND='noninteractive' apt-get -o Dpkg::Options::='--force-confnew' -y install golang
 
+# install redis and uniqush
 sudo apt-get install -y redis-server mercurial
 cd
 git clone https://github.com/uniqush/uniqush-push.git
