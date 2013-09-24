@@ -95,9 +95,6 @@ mvn clean install -DskipTests=true -Dusergrid-custom-spring-properties=classpath
 #mkdir -p /var/lib/tomcat7/webapps
 #mv ROOT.war /var/lib/tomcat7/webapps
 
-# mvn install -DskipTests=true -Dusergrid-custom-spring-properties=classpath:/usergrid-custom.properties # second try in case of out of memory error on aws
-# mvn install -DskipTests=true -Dusergrid-custom-spring-properties=classpath:/usergrid-custom.properties # third try in case of out of memory error on aws
-
 # /config/src/main/resources/usergrid-custom.properties
 # /rest/src/main/resources/usergrid-custom.properties
 
