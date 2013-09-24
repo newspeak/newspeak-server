@@ -152,7 +152,7 @@ EOF
 sudo mkdir -p /etc/tinc/newspeak/hosts
 
 sudo bash -c "cat > /etc/tinc/newspeak/hosts/cassandraMain" <<EOF
-Address=54.217.231.132 # use elastic ip if on aws
+Address=192.168.11.1 # use elastic ip if on aws
 Port=54321
 Subnet=192.168.0.0/16
 Compression=9
