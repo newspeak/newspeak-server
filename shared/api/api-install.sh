@@ -184,6 +184,7 @@ sudo /etc/init.d/cassandra stop
 # update cluster config
 sudo cp /vagrant/api/cassandra.yaml /etc/cassandra/cassandra.yaml
 
+# delete data containing old cluster config
 sudo rm -rf /var/lib/cassandra/data
 
 # reduce memory usage of cassandra and tomcat for aws by overwriting memory default value
