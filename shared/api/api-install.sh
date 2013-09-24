@@ -84,11 +84,10 @@ cd
 rm -rf usergrid-stack
 git clone https://github.com/apigee/usergrid-stack.git
 cd usergrid-stack
-#git reset --hard v20130502-1300
-git reset --hard f418fa91b08784fbc1065a318ff9f0b88d08bf61 # 2013-06-14
-sudo cp $FILES/live/usergrid-default.properties $HOME/usergrid-stack/config/src/main/resources
-sudo killall tincd # in case it is running, free up memory
+git reset --hard fb4fe7d0fd3cbe950869abf7849d7f558513e801 # 2013-09-20
+sudo cp $FILES/api/usergrid-default.properties $HOME/usergrid-stack/config/src/main/resources
 
+# start usergrid compilation
 mvn clean install -DskipTests=true -Dusergrid-custom-spring-properties=classpath:/usergrid-custom.properties
 
 # instead of compilation, download precompiled .war
