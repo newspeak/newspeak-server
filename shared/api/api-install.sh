@@ -84,11 +84,10 @@ cd
 rm -rf usergrid-stack
 git clone https://github.com/apigee/usergrid-stack.git
 cd usergrid-stack
-#git reset --hard v20130502-1300
-git reset --hard f418fa91b08784fbc1065a318ff9f0b88d08bf61 # 2013-06-14
-sudo cp $FILES/live/usergrid-default.properties $HOME/usergrid-stack/config/src/main/resources
-sudo killall tincd # in case it is running, free up memory
+git reset --hard fb4fe7d0fd3cbe950869abf7849d7f558513e801 # 2013-09-20
+sudo cp $FILES/api/usergrid-default.properties $HOME/usergrid-stack/config/src/main/resources
 
+# start usergrid compilation
 mvn clean install -DskipTests=true -Dusergrid-custom-spring-properties=classpath:/usergrid-custom.properties
 
 # instead of compilation, download precompiled .war
@@ -96,14 +95,18 @@ mvn clean install -DskipTests=true -Dusergrid-custom-spring-properties=classpath
 #mkdir -p /var/lib/tomcat7/webapps
 #mv ROOT.war /var/lib/tomcat7/webapps
 
-# mvn install -DskipTests=true -Dusergrid-custom-spring-properties=classpath:/usergrid-custom.properties # second try in case of out of memory error on aws
-# mvn install -DskipTests=true -Dusergrid-custom-spring-properties=classpath:/usergrid-custom.properties # third try in case of out of memory error on aws
-
 # /config/src/main/resources/usergrid-custom.properties
 # /rest/src/main/resources/usergrid-custom.properties
 
-cd ..
+# install usergrid in tomcat
+sudo aptitude install -y tomcat7
+sudo rm -rf /var/lib/tomcat7/webapps/ROOT
+sudo cp $HOME/usergrid-stack/rest/target/ROOT.war /var/lib/tomcat7/webapps
 
+# stop until setup is complete to free up memory
+sudo /etc/init.d/tomcat7 stop
+
+cd ..
 
 echo ===== vpn =====
 # tinc vpn
@@ -115,7 +118,7 @@ sudo bash -c "cat >> /etc/network/interfaces" <<EOF
 auto vpn
 iface vpn inet static
         address 192.168.11.1
-#        use address 192.168.11.1 on node1
+#        use address 192.168.11.1 on node1 (running cassandra)
 #        use address 192.168.12.1 on node2
         netmask 255.255.0.0
         tinc-net newspeak
@@ -131,11 +134,13 @@ newspeak
 EOF
 
 # generate key
+# open question: is at this stage of the boot process alread enough entropy available from the linux kernel to generate a good key?
+# see: "Mining Your Ps and Qs: Detection of Widespread Weak Keys in Network Devices",
+# https://factorable.net/weakkeys12.extended.pdf
 sudo mkdir -p /etc/tinc/newspeak
 cd /etc/tinc/newspeak
 sudo openssl genrsa -out rsa_key.priv 8192
 sudo openssl rsa -in rsa_key.priv -pubout > rsa_key.pub
-#sudo tincd -K 8192 -n newspeak
 
 sudo bash -c "cat > /etc/tinc/newspeak/tinc.conf" <<EOF
 Device=/dev/net/tun
@@ -150,7 +155,7 @@ EOF
 sudo mkdir -p /etc/tinc/newspeak/hosts
 
 sudo bash -c "cat > /etc/tinc/newspeak/hosts/cassandraMain" <<EOF
-Address=54.217.231.132 # use elastic ip if on aws
+Address=192.168.11.1 # use elastic ip if on aws
 Port=54321
 Subnet=192.168.0.0/16
 Compression=9
@@ -173,44 +178,41 @@ wget -O - http://debian.datastax.com/debian/repo_key | sudo apt-key add -
 sudo apt-get update
 sudo apt-get install -y cassandra
 
-# stop until setup is complete to free up memory on aws
-#sudo /etc/init.d/cassandra stop
-
-# install usergrid in tomcat
-sudo aptitude install -y tomcat7
-sudo rm -rf /var/lib/tomcat7/webapps/ROOT
-sudo cp $HOME/usergrid-stack/rest/target/ROOT.war /var/lib/tomcat7/webapps
-
-# rename and configure cluster, apply changes
-sudo cp $FILES/live/cassandra.yaml /etc/cassandra/
-rm -rf /var/lib/cassandra/data
-
-# reduce memory usage of cassandra and tomcat for aws by overwriting memory default value
-# sudo cp $FILES/live/cassandra-env.sh /etc/cassandra/
-# sudo cp $FILES/live/tomcat7.default /etc/default/
-
 # stop until setup is complete to free up memory
 sudo /etc/init.d/cassandra stop
-sudo /etc/init.d/tomcat7 stop
+
+# update cluster config
+sudo cp /vagrant/api/cassandra.yaml /etc/cassandra/cassandra.yaml
+
+# delete data containing old cluster config
+sudo rm -rf /var/lib/cassandra/data
+
+# reduce memory usage of cassandra and tomcat for aws by overwriting memory default value
+# sudo cp $FILES/api/cassandra-env.sh /etc/cassandra/
+# sudo cp $FILES/api/tomcat7.default /etc/default/
 
 
 echo ===== uniqush =====
 
-# go
-wget https://go.googlecode.com/files/go1.1.1.linux-amd64.tar.gz
+# install a recent version of go
+cd
+wget https://go.googlecode.com/files/go1.1.2.linux-amd64.tar.gz
 tar xf go*.linux-amd64.tar.gz
 rm go*linux-amd64.tar.gz
 sudo mv go /usr/local
 sudo ln -s /usr/local/go/bin/go /usr/local/bin
 sudo ln -s /usr/local/go/bin/gofmt /usr/local/bin
 sudo ln -s /usr/local/go/bin/godoc /usr/local/bin
+
+# alternatively, install the version provided by the package manager 
 #sudo DEBIAN_FRONTEND='noninteractive' apt-get -o Dpkg::Options::='--force-confnew' -y install golang
 
+# install redis and uniqush
 sudo apt-get install -y redis-server mercurial
 cd
 git clone https://github.com/uniqush/uniqush-push.git
 cd uniqush-push
-#git reset --hard 1.4.3
+git reset --hard 1.5.0
 export GOPATH=$(pwd)
 go get code.google.com/p/goconf/conf # requires mercurial
 go get github.com/nu7hatch/gouuid
@@ -232,7 +234,7 @@ echo ===== go api server =====
 sudo apt-get install -y memcached
 
 # initscript
-sudo cp $FILES/live/newspeak.initscript /etc/init.d/newspeak
+sudo cp $FILES/api/newspeak.initscript /etc/init.d/newspeak
 sudo chmod 755 /etc/init.d/newspeak
 cd /etc/init.d
 sudo update-rc.d newspeak defaults
@@ -258,7 +260,7 @@ sudo cp bin/newspeak /usr/local/bin
 
 # set apns certificates
 sudo mkdir -p /etc/newspeak/apns-certs
-sudo cp -r $FILES/live/apns-certs-production/* /etc/newspeak/apns-certs
+sudo cp -r $FILES/api/apns-certs-production/* /etc/newspeak/apns-certs
 
 # bitly statsdaemon
 cd
@@ -271,15 +273,19 @@ sudo cp bin/statsdaemon /usr/local/bin
 
 echo ===== usergrid setup =====
 
+sudo /etc/init.d/tinc start
+sudo /etc/init.d/tomcat7 start
 sudo /etc/init.d/cassandra start
 
 # setup db
 sudo apt-get install curl -y
 curl --user superuser:superuser http://localhost:8080/system/database/setup
 
-# simple test
+# simple test - should not return any errors
 curl localhost:8080/status
 curl localhost:8080/test/hello
+echo checking if cassandra is available from usergrid:
+curl -s localhost:8080/status | grep cassandraAvailable
 
 # create organization
 curl -X POST  \
