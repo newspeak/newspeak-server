@@ -11,7 +11,7 @@ this leads to the following directory structure:
  * `newspeak-server/api-aws`: api server for use with amazon aws
  * `newspeak-server/shared`: files shared between the above machine setups (code, config files, ..)
 
-each of the directories `api-vm` and `api-aws` contain a file called `Vagrantfile` with server configuration.
+each of the directories `api-vm` and `api-aws` contains a file called `Vagrantfile` with server configuration.
 
 the directory `newspeak-server/shared/newspeak` contains the actual server sources. see the readme file there for more information.
 
