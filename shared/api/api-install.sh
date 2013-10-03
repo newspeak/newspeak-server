@@ -182,7 +182,7 @@ sudo apt-get install -y cassandra
 sudo /etc/init.d/cassandra stop
 
 # update cluster config
-sudo cp /vagrant/api/cassandra.yaml /etc/cassandra/cassandra.yaml
+sudo cp $FILES/api/cassandra.yaml /etc/cassandra/cassandra.yaml
 
 # delete data containing old cluster config
 sudo rm -rf /var/lib/cassandra/data
