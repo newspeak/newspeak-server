@@ -19,13 +19,13 @@ package filter
 
 import (
 	"errors"
+	"fmt"
 	"github.com/fitstar/falcore"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"newspeak/response_messages"
 	"newspeak/services"
-	"fmt"
 )
 
 // DevicesFilter "class"
