@@ -19,12 +19,12 @@ package filter
 
 import (
 	"errors"
+	"fmt"
 	"github.com/fitstar/falcore"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"newspeak/response_messages"
-	"fmt"
 	"time"
 )
 
@@ -50,7 +50,7 @@ func sendMessageToUniqush(request *falcore.Request) *http.Response {
 	recipient := request.HttpRequest.FormValue("recipient")
 	message := request.HttpRequest.FormValue("message")
 
-	fmt.Println(time.Now().Format("2006-01-02 15:04:05")+" delivering message '" + message + "' to '" + recipient + "'")
+	fmt.Println(time.Now().Format("2006-01-02 15:04:05") + " delivering message '" + message + "' to '" + recipient + "'")
 
 	uniqushResponse, uniqushError := http.PostForm("http://localhost:9898/push", url.Values{
 		"service":    {"newspeak"},
@@ -78,7 +78,7 @@ func sendMessageToUniqush(request *falcore.Request) *http.Response {
 			body["MessageSent"] = message
 			body["Response"] = string(uniqushResponseBody)
 			request.CurrentStage.Status = byte(5)
-			fmt.Println(time.Now().Format("2006-01-02 15:04:05")+" delivered message '" + message + "' to '", recipient + "' response: " + string(uniqushResponseBody))
+			fmt.Println(time.Now().Format("2006-01-02 15:04:05")+" delivered message '"+message+"' to '", recipient+"' response: "+string(uniqushResponseBody))
 			response = response_messages.SuccessResponse(request, body)
 		}
 	}
