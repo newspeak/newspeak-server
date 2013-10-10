@@ -250,9 +250,11 @@ cd $FILES/newspeak/
 export GOPATH=$(pwd)
 go get github.com/fitstar/falcore
 go get github.com/Mistobaan/go-apns
-go get github.com/orfjackal/gospec/src/gospec
 go get github.com/peterbourgon/g2s
 go get github.com/bradfitz/gomemcache/memcache
+go get github.com/onsi/ginkgo
+go get github.com/onsi/gomega
+go install github.com/onsi/ginkgo/ginkgo
 
 # build and install
 go install newspeak
