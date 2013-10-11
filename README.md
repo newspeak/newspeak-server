@@ -21,8 +21,8 @@ dependencies
 to run the server locally, installation of the following software is needed:
 
  * [virtualbox](http://virtualbox.com)
- * [vagrant](http://vagrantup.com) - only a recent version (1.2.x) is supported! download from [here](http://downloads.vagrantup.com).
- * install vagrant plugins with: `vagrant plugin install vagrant-aws vagrant-vbguest`
+ * [vagrant](http://vagrantup.com) - only a recent version (1.3.x) is supported! download from [here](http://downloads.vagrantup.com).
+ * install vagrant bindler plugin with: `vagrant plugin install bindler`
 
 to test sending push messages to ios devices, you have to be member in the [ios developer program](https://developer.apple.com/programs/ios/). receiving push messages is not supported by the ios simulator so will need a real ios device for that. however, you can still test large parts of the system without device or developer program membership.
 

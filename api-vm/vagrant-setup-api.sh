@@ -22,6 +22,10 @@
 
 cd $(dirname $0)
 
+# install vagrant plugins
+vagrant bindler setup
+vagrant plugin bundle
+
 vagrant up --no-provision
 
 # remove outdated guest additions and chef
