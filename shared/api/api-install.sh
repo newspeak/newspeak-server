@@ -231,7 +231,7 @@ sudo /etc/init.d/redis-server stop
 
 echo ===== go api server =====
 
-sudo apt-get install -y memcached
+sudo apt-get install -y memcached bzr
 
 # initscript
 sudo cp $FILES/api/newspeak.initscript /etc/init.d/newspeak
@@ -250,10 +250,12 @@ cd $FILES/newspeak/
 export GOPATH=$(pwd)
 go get github.com/fitstar/falcore
 go get github.com/Mistobaan/go-apns
-go get github.com/peterbourgon/g2s
 go get github.com/bradfitz/gomemcache/memcache
+go get github.com/readmill/metrics
+go get github.com/readmill/metrics/riemann
 go get github.com/onsi/ginkgo
 go get github.com/onsi/gomega
+go get launchpad.net/gocheck
 go install github.com/onsi/ginkgo/ginkgo
 
 # build and install
