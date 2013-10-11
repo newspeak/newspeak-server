@@ -50,16 +50,13 @@ vagrant halt
 vagrant up --no-provision
 
 # copy over cached files to speed up compilation
-vagrant ssh -c "mkdir -p /home/vagrant/deb /home/vagrant/.m2"
-../shared/scripts/vagrant/scp.sh -r ../cache/deb/*.deb default:/home/vagrant
+vagrant ssh -c "mkdir -p /home/vagrant/.m2"
 ../shared/scripts/vagrant/scp.sh -r ../cache/maven/* default:/home/vagrant/.m2
-vagrant ssh -c "sudo mv /home/vagrant/deb/*.deb /var/cache/apt/archives; rm -rf /home/vagrant/deb"
 
 # start api server installation
 vagrant ssh -c "/vagrant/api/api-install.sh"
 
 # update cache to speed up subsequent installs
 rm -rf ../cache
-mkdir -p ../cache/deb ../cache/maven
-../shared/scripts/vagrant/scp.sh -r default:/var/cache/apt/archives/*.deb ../cache/deb
+mkdir -p ../cache/maven
 ../shared/scripts/vagrant/scp.sh -r default:/home/vagrant/.m2/* ../cache/maven

@@ -38,6 +38,11 @@ Vagrant.configure("2") do |config|
   # argument is a set of non-required options.
   config.vm.synced_folder "../shared", "/vagrant"
 
+  # Enable caching. Files are stored at ~/.vagrant.d/cache
+  # See https://github.com/fgrehm/vagrant-cachier#configurations
+  config.cache.enable :apt
+  config.cache.enable :chef
+
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   config.vm.provider :virtualbox do |vb|
