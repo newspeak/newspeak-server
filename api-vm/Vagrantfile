@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
-  #config.vm.network :forwarded_port, guest: 5000, host: 80   # newspeak
+  #config.vm.network :forwarded_port, guest: 5000, host: 80   # newspeak api
   #config.vm.network :forwarded_port, guest: 8080, host: 8080 # usergrid
   #config.vm.network :forwarded_port, guest: 9898, host: 9898 # uniqush
 
@@ -29,8 +29,13 @@ Vagrant.configure("2") do |config|
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
-  # your network.
-  config.vm.network :public_network
+  # your network. 
+  # Set the preferred interface you want to bridge to with "pref_interface"
+  pref_interface = ['en0: WLAN (AirPort)']
+  vm_interfaces = %x( VBoxManage list bridgedifs | grep ^Name ).gsub(/Name:\s+/, '').split("\n")
+  pref_interface = pref_interface.map {|n| n if vm_interfaces.include?(n)}.compact
+  $network_interface = pref_interface[0]
+  config.vm.network :public_network, :bridge => $network_interface
 
   # Share an additional folder to the guest VM. The first argument is
   # the path on the host to the actual folder. The second argument is
