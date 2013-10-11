@@ -1,0 +1,9 @@
+[
+  "vagrant-aws",
+  "vagrant-vbguest",
+  "vagrant-rsync",
+  "vagrant-cachier",
+  "vagrant-vbox-snapshot",
+  "vagrant-notify",
+  "vagrant-global-status"
+]

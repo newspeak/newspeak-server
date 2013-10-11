@@ -22,6 +22,10 @@
 
 cd $(dirname $0)
 
+# install vagrant plugins
+vagrant bindler setup
+vagrant plugin bundle
+
 vagrant up --no-provision
 
 # remove outdated guest additions and chef
@@ -41,21 +45,14 @@ vagrant ssh -c "sudo apt-get -y --purge autoremove"
 # update guest additions
 vagrant vbguest
 
-# do clean reboot. you have to manually check if guest addition versions match on startup
-vagrant halt
-vagrant up --no-provision
-
 # copy over cached files to speed up compilation
-vagrant ssh -c "mkdir -p /home/vagrant/deb /home/vagrant/.m2"
-../shared/scripts/vagrant/scp.sh -r ../cache/deb/*.deb default:/home/vagrant
+vagrant ssh -c "mkdir -p /home/vagrant/.m2"
 ../shared/scripts/vagrant/scp.sh -r ../cache/maven/* default:/home/vagrant/.m2
-vagrant ssh -c "sudo mv /home/vagrant/deb/*.deb /var/cache/apt/archives; rm -rf /home/vagrant/deb"
 
 # start api server installation
 vagrant ssh -c "/vagrant/api/api-install.sh"
 
 # update cache to speed up subsequent installs
 rm -rf ../cache
-mkdir -p ../cache/deb ../cache/maven
-../shared/scripts/vagrant/scp.sh -r default:/var/cache/apt/archives/*.deb ../cache/deb
+mkdir -p ../cache/maven
 ../shared/scripts/vagrant/scp.sh -r default:/home/vagrant/.m2/* ../cache/maven

@@ -18,6 +18,8 @@ cache
 
 # go dependencies
 shared/newspeak/src/github.com
+shared/newspeak/src/code.google.com
+shared/newspeak/src/launchpad.net
 
 # Xcode
 .DS_Store
