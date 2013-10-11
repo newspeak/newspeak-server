@@ -45,10 +45,6 @@ vagrant ssh -c "sudo apt-get -y --purge autoremove"
 # update guest additions
 vagrant vbguest
 
-# do clean reboot. you have to manually check if guest addition versions match on startup
-vagrant halt
-vagrant up --no-provision
-
 # copy over cached files to speed up compilation
 vagrant ssh -c "mkdir -p /home/vagrant/.m2"
 ../shared/scripts/vagrant/scp.sh -r ../cache/maven/* default:/home/vagrant/.m2
